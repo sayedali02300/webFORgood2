@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="../pics/01.png">
+  <title>Groupie Tracker</title>
+</head>
+
+<body>
+  <section id="up"></section>
+  <section id="left"></section>
+  <section id="down"></section>
+  <section id="right"></section>
+  <h1>Groupie Tracker</h1>
+
+  <div class="search-wrapper">
+    <form method="get" action="/">
+      <input type="text" name="search" id="search-input" placeholder="Search artist..." autocomplete="off" />
+      <button id="search-button" type="submit"><img src="/pics/search-337.png" alt="Search"></button>
+    </form>
+    <ul id="suggestions" style="list-style: none; color:white; padding: 5px; margin-top: 10px;"></ul>
+  </div>
+
+  <div class="container">
+    {{range .Artists}}
+    <form action="/ArtistDetail" method="post">
+      <input type="hidden" name="ArtistId" value="{{.Id}}">
+      <button type="submit" style="all: unset;">
+        <div class="card">
+          <img src="{{.Image}}" alt="Image of {{.Name}}">
+          <div class="card-name">{{.Id}} {{.Name}}</div>
+        </div>
+      </button>
+    </form>
+    {{end}}
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchInput = document.getElementById("search-input");
+      const suggestionsBox = document.getElementById("suggestions");
+
+      searchInput.addEventListener("input", function () {
+        const input = searchInput.value.trim();
+
+        if (input.length === 0) {
+          suggestionsBox.innerHTML = "";
+          return;
+        }
+
+        fetch(`/suggest?q=${encodeURIComponent(input)}`)
+          .then(res => res.json())
+          .then(data => {
+            suggestionsBox.innerHTML = "";
+
+            data.forEach(name => {
+              const li = document.createElement("li");
+              li.textContent = name;
+              li.classList.add("suggestion-item");
+              li.onclick = () => {
+                searchInput.value = name;
+                suggestionsBox.innerHTML = "";
+
+                const clicker = document.getElementById("search-button");
+                clicker.click();
+              };
+              suggestionsBox.appendChild(li);
+            });
+          })
+          .catch(err => {
+            console.error("Error fetching suggestions:", err);
+          });
+      });
+    });
+  </script>
+
+</body>
+
+{{if .SearchQuery}}
+<div id="result" style="color: white; margin-top: 20px;">
+  <button type="button" onclick="window.location='/'" class="refresh">
+    <img src="/pics/return.png">
+  </button>
+</div>
+{{end}}
+
+</html>

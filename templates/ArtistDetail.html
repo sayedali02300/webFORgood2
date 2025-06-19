@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../css/styleDetails.css">
+    <link rel="icon" href="../pics/01.png">
+    <title>Artist Detail</title>
+</head>
+<body>
+   <section id="up"></section>
+   <section id="left"></section>
+   <section id="down"></section>
+   <section id="right"></section>
+    <h1>{{.Artist.Name}}</h1>
+    
+ 
+    <img src="{{.Artist.Image}}" alt="Image of {{.Artist.Name}}" class="image">
+    
+
+    <p><strong>ID:</strong> {{.Artist.Id}}</p>
+
+    <p><strong>Members:</strong> 
+        {{range .Artist.Members}}
+            {{.}}, 
+        {{end}}
+    </p>
+    
+   
+    <p><strong>Formed in:</strong> {{.Artist.CreationDate}}</p>
+    
+    <p><strong>First Album:</strong> {{.Artist.FirstAlbum}}</p>
+    
+    <div class="box">
+    <p><strong>Locations & Dates of concerts:</strong></p>
+<ul>
+  {{range $location, $dates := .Relation.DatesLocations}}
+    <li>{{$location}}:
+      <ul>
+        {{range $date := $dates}}
+          <li>{{ $date }}</li>
+        {{end}}
+      </ul>
+    </li>
+  {{end}}
+</ul>
+    </div>
+    <br>
+    <button type="button" class="return" onclick="window.location='/'">
+        <img src="../pics/return.png" alt="icon" class="btn-icon">
+    </button>
+    <br>
+</body>
+</html>

@@ -1,0 +1,17 @@
+/* styleforerror.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh; /* Full viewport height */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;     /* Center vertically */
+  background-color: #000;  /* Optional: dark background */
+}
+
+.wrong-404 {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+}
